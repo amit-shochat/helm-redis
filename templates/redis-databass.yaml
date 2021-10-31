@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "redis.fullname" . }}-deployment
+  labels:
+    app: {{ template "redis.fullname" . }}-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "redis.fullname" . }}-redis
+  template:
+    metadata:
+      labels:
+        app: {{ template "redis.fullname" . }}-redis
+    spec:
+      containers:
+        - name: redis
+          image: amitshochat66/redis:1.0.0
+          command:
+            - redis-server
+            - "/redis-master/redis.conf"
+          env:
+            - name: MASTER
+              value: "true"
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /redis-master
+              name: config
+      volumes:
+        - name: data
+          emptyDir: { }
+        - name: config
+          configMap:
+            name: {{ template "redis.fullname" . }}-config
+            items:
+              - key: {{ template "redis.fullname" . }}-config
+                path: redis.conf
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "redis.fullname" . }}-service
+spec:
+  selector:
+    app: {{ template "redis.fullname" . }}-redis
+  ports:
+    - name: "redis-port"
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: LoadBalancer
