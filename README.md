@@ -1,15 +1,4 @@
-# HELM REDIS
-
-<a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Famit-shochat%2Fhelm-redis">
-<img alt="Open in Cloud Shell" src="https://gstatic.com/cloudssh/images/open-btn.svg"></a>
-
-***if you have a kubernetes access on google cloud PLZ check the link up***
-
-
-**For change the admin pass!**
-
-**The AUTH password is ADMIN**
-
+# redis helm
 in the templates/configMap.yaml in line #514 change the word admin to your new password
 <pre>
 ...
